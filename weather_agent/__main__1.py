@@ -1,21 +1,8 @@
-from typing import Optional
-from pydantic import Field
 from dotenv import load_dotenv
 import json
 import ollama
 import requests
 from openai import OpenAI
-from pydantic import BaseModel
-
-# Adding more reliability in response if the LLM miss the instruction to send json and send markdown instead
-# out server may panic
-
-class ResponseModel(BaseModel):
-    step: str = Field(..., description="The current step in the process: START, PLAN, OUTPUT, TOOL, or OBSERVE.")
-    content: Optional[str] = Field(None, description="The content of the response, which can be a message or information related to the step.")
-    tool: Optional[str] = Field(None, description="The name of the tool being called, if applicable.")
-    input: Optional[str] = Field(None, description="The input for the tool call, if applicable.")
-    output: Optional[str] = Field(None, description="The output from the tool call, if applicable.")
 
 load_dotenv()
 
@@ -99,14 +86,9 @@ if  __name__ == "__main__":
             #    messages=messages,
             #    tools=[weather_tool]
             #)
-            #response = client.chat.completions.create(
-            #    model="gpt-4o",
-            #    response_format={"type": "json_object"},
-            #    messages=messages
-            #)
-            response = client.chat.completions.parse(
+            response = client.chat.completions.create(
                 model="gpt-4o",
-                response_format=ResponseModel,
+                response_format={"type": "json_object"},
                 messages=messages
             )
         except Exception as e:
@@ -122,25 +104,24 @@ if  __name__ == "__main__":
 
         #print(f"Raw Response: {raw_response}")
 
-        #parsed_response = json.loads(raw_response)
-        parsed_response = response.choices[0].message.parsed
+        parsed_response = json.loads(raw_response)
 
         #print(f"Parsed Response: {parsed_response}")
 
-        # since this is object now not dict, we can use dot notation to access the attributes
-        if parsed_response.step == "OUTPUT":
-            print(parsed_response.content)
+        ##### use .get(key) to avoid runtime exceptions  ######
+        if parsed_response["step"] == "OUTPUT":
+            print(parsed_response["content"])
             break
-        if parsed_response.step == "START":
-            print(parsed_response.content)
+        if parsed_response["step"] == "START":
+            print(parsed_response["content"])
             continue
-        if parsed_response.step == "PLAN":
-            print(parsed_response.content)
+        if parsed_response["step"] == "PLAN":
+            print(parsed_response["content"])
             continue
-        if parsed_response.step == "TOOL":
-            tool_name = parsed_response.tool
-            tool_input = parsed_response.input
-
+        if parsed_response["step"] == "TOOL":
+            tool_name = parsed_response["tool"]
+            tool_input = parsed_response["input"]
+            
             if tool_name in available_tools:
                 tool_response = available_tools[tool_name](tool_input)
                 messages.append({
