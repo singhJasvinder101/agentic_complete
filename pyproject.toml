@@ -1,0 +1,16 @@
+[project]
+name = "agentic-complete"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "email-validator>=2.3.0",
+    "mcp>=1.28.0",
+    "ollama>=0.6.2",
+    "openai>=2.43.0",
+    "pydantic>=2.13.4",
+    "requests>=2.34.2",
+    "transformers>=5.12.1",
+]
+
