@@ -16,6 +16,7 @@ if __name__ == "__main__":
         user = {
             "username": "john_doe",
             "age": 30,
+
             "bio": "A software developer."
         }
         user2 = User(**user)
