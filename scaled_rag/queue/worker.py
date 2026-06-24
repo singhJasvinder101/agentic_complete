@@ -12,7 +12,7 @@ embedding_model = OpenAIEmbeddings(
 
 vector_store = QdrantVectorStore.from_existing_collection(
     url="http://localhost:6333",
-    collection_name="rag-collection",
+    collection_name="rag-collection-nodejs",
     embedding=embedding_model,
 )
 
