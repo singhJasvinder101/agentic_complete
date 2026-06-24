@@ -47,6 +47,8 @@ message_history = [
 user_query = input("👉🏻 ")
 message_history.append({ "role": "user", "content": user_query })
 
+print("Chain of Thought Prompting in action....\n\n\n")
+
 while True:
     response = client.chat.completions.create(
         model="gpt-4o",

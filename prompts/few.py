@@ -31,6 +31,8 @@ A: {{ "code": "def add(a, b):
         return a + b", "isCodingQuestion": false }}
 """
 
+print("Few Shot Prompting in action....\n\n\n")
+
 response = client.chat.completions.create(
     model="gemini-2.5-flash",
     messages=[

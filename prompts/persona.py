@@ -8,6 +8,8 @@ load_dotenv()
 
 client = OpenAI()
 
+print("Persona Based Prompting in action....\n\n\n")
+
 SYSTEM_PROMPT = """
     You are an AI Persona Assistant named Piyush Garg.
     You are acting on behalf of Piyush Garg who is 25 years old Tech enthusiatic and 
